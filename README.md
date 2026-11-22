@@ -20,6 +20,16 @@ python easy_backup.py
 
 ## Build a standalone EXE
 
+Double-click **`build_exe.bat`**. It installs PyInstaller and the requirements if needed, builds with `SmartBackup.spec` and writes:
+
+```
+release/SmartBackup-<version>-windows.exe
+```
+
+Change the version in `build_version.json` before a release. The same one-click script is used across the EazyFix Python apps.
+
+Manual alternative:
+
 ```bash
 python -m pip install pyinstaller
 python -m PyInstaller --onefile --windowed --name SmartBackup easy_backup.py

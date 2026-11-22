@@ -11,7 +11,7 @@ env/
 # PyInstaller
 build/
 dist/
-*.spec
+release/
 
 # Distribution / packaging
 *.exe

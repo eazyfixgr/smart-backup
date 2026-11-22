@@ -1,0 +1,7 @@
+{
+  "name": "SmartBackup",
+  "entry": "easy_backup.py",
+  "spec": "SmartBackup.spec",
+  "icon": "",
+  "extraArgs": []
+}
