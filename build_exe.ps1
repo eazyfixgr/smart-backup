@@ -59,10 +59,14 @@ if (-not $hasPyInstaller) {
     Write-Host "==> PyInstaller is installed" -ForegroundColor Green
 }
 
-$requirements = Join-Path $Root 'requirements.txt'
+$requirements = Join-Path $Root 'requirements-build.txt'
+if (-not (Test-Path -LiteralPath $requirements)) {
+    $requirements = Join-Path $Root 'requirements.txt'
+}
 if (Test-Path -LiteralPath $requirements) {
-    Write-Host "==> Installing requirements.txt" -ForegroundColor Cyan
-    Run-Python @('-m', 'pip', 'install', '-r', 'requirements.txt')
+    $requirementsName = Split-Path -Leaf $requirements
+    Write-Host "==> Installing $requirementsName" -ForegroundColor Cyan
+    Run-Python @('-m', 'pip', 'install', '-r', $requirementsName)
 }
 
 $spec = [string]$config.spec
@@ -71,11 +75,11 @@ if ($spec -and (Test-Path -LiteralPath (Join-Path $Root $spec))) {
     Run-Python @('-m', 'PyInstaller', '--noconfirm', '--clean', $spec)
 } else {
     Write-Host "==> Building from $entry" -ForegroundColor Cyan
-    $args = @('-m', 'PyInstaller', '--noconfirm', '--clean', '--onefile', '--windowed', '--name', $name)
-    if ($config.icon) { $args += @('--icon', [string]$config.icon) }
-    if ($config.extraArgs) { $args += @($config.extraArgs | ForEach-Object { [string]$_ }) }
-    $args += $entry
-    Run-Python $args
+    $pyArgs = @('-m', 'PyInstaller', '--noconfirm', '--clean', '--onefile', '--windowed', '--name', $name)
+    if ($config.icon) { $pyArgs += @('--icon', [string]$config.icon) }
+    if ($config.extraArgs) { $pyArgs += @($config.extraArgs | ForEach-Object { [string]$_ }) }
+    $pyArgs += $entry
+    Run-Python $pyArgs
 }
 
 $exePath = Join-Path $Root "dist\$name.exe"
